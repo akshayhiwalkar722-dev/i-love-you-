@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Will You Be My Valentine?</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- Floating hearts -->
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Sound (optional) -->
+  <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
+  <!-- MAIN WRAPPER -->
+  <main class="wrap">
+
+    <!-- PAGE 1 -->
+    <section class="page active" id="page1">
+      <div class="topbar">
+        <div class="pill">💌 Valentine Mode</div>
+        <div class="pill">📅 14 FEB</div>
+      </div>
+
+      <div class="hero">
+        <p class="mini">ladies remember if he wanted to, he would.</p>
+
+        <h1 class="type" data-text="Hey there,"></h1>
+        <h2 class="type sub" data-text="Will you be my Valentine? 💗"></h2>
+
+        <div class="btnRow">
+          <button class="btn yes" id="yesBtn">YES OFC 💖</button>
+          <button class="btn no" id="noBtn">NO THANK YOU 😭</button>
+        </div>
+
+        <p class="hint">Try pressing “No” 😈</p>
+      </div>
+    </section>
+
+    <!-- PAGE 2 -->
+    <section class="page" id="page2">
+      <div class="topbar">
+        <div class="pill">🎁 Gifts</div>
+        <div class="pill ghost" onclick="go('page1')">↩ Restart</div>
+      </div>
+
+      <h1 class="title">Yay, you said YES! 🥹💗</h1>
+      <p class="subtitle">I made all these for you hehe</p>
+
+      <div class="giftGrid">
+        <button class="giftCard" onclick="goGift(1)">
+          <span class="emoji">🌹</span>
+          <span class="gTitle">Gift 1</span>
+          <span class="gDesc">Cute messages</span>
+        </button>
+
+        <button class="giftCard" onclick="goGift(2)">
+          <span class="emoji">💌</span>
+          <span class="gTitle">Gift 2</span>
+          <span class="gDesc">Love letter</span>
+        </button>
+
+        <button class="giftCard" onclick="goGift(3)">
+          <span class="emoji">🎶</span>
+          <span class="gTitle">Gift 3</span>
+          <span class="gDesc">QR Song</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- GIFT 1 -->
+    <section class="page" id="gift1">
+      <div class="topbar">
+        <div class="pill">🌹 Gift 1</div>
+        <div class="pill ghost" onclick="go('page2')">← Back</div>
+      </div>
+
+      <div class="card big">
+        <h2 class="title2">A bouquet for you 💐</h2>
+
+        <div class="bubbleRow">
+          <div class="bubble">I will always love you no matter what 💗</div>
+          <div class="bubble">You are the best part of my life 🥹</div>
+          <div class="bubble">You will forever be my only option ♾️</div>
+          <div class="bubble">I can’t imagine my life without you 💞</div>
+        </div>
+
+        <button class="btn backBtn" onclick="go('page2')">Back to Gifts 🎁</button>
+      </div>
+    </section>
+
+    <!-- GIFT 2 -->
+    <section class="page" id="gift2">
+      <div class="topbar">
+        <div class="pill">💌 Gift 2</div>
+        <div class="pill ghost" onclick="go('page2')">← Back</div>
+      </div>
+
+      <div class="paper">
+        <h2 class="paperTitle">Words from my heart ✍️</h2>
+
+        <p><b>To the love of my life,</b></p>
+        <p>
+          You make my life so meaningful and I’m so lucky to have you.
+          I love you wholeheartedly and I can’t wait to keep loving you
+          for the rest of my life.
+        </p>
+        <p>
+          You’re literally the most beautiful girl I know.
+          I choose you… every single day. 💗
+        </p>
+
+        <p class="xoxo">XOXO</p>
+
+        <button class="btn backBtn" onclick="go('page2')">Back to Gifts 🎁</button>
+      </div>
+    </section>
+
+    <!-- GIFT 3 -->
+    <section class="page" id="gift3">
+      <div class="topbar">
+        <div class="pill">🎶 Gift 3</div>
+        <div class="pill ghost" onclick="go('page2')">← Back</div>
+      </div>
+
+      <div class="card big center">
+        <h2 class="title2">Song for you 🎧</h2>
+        <p class="subtitle">Scan the QR code 👇</p>
+
+        <div class="qrWrap">
+          <img src="qr.png" alt="QR Code" class="qr"/>
+        </div>
+
+        <p class="tiny">Made with love 💗</p>
+
+        <button class="btn yes" onclick="go('page1')">Click to Restart ↩</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
