@@ -1,159 +1,108 @@
-<!DOCTYPE html>
-html, body {
-  scroll-behavior: smooth;
+const clickSound = document.getElementById("clickSound");
+
+function sfx(){
+  if(!clickSound) return;
+  clickSound.currentTime = 0;
+  clickSound.play().catch(()=>{});
 }
 
-.page {
-  transition: all 0.4s ease;
+/* ---------- Page Navigation ---------- */
+function go(id){
+  sfx();
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  // Restart typewriter when page1 opens
+  if(id === "page1"){
+    startTypewriter();
+  }
 }
-index.html
-style.css
-script.js
-qr.png
-click.mp3 (optional)
 
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Will You Be My Valentine?</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
+function goGift(n){
+  go("gift" + n);
+}
 
-  <!-- Floating hearts -->
-  <div class="hearts" id="hearts"></div>
+/* ---------- No Button Run Away (Desktop + Mobile) ---------- */
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
 
-  <!-- Sound (optional) -->
-  <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+function moveNoButton(){
+  const parent = document.querySelector("#page1 .btnRow");
+  const rect = parent.getBoundingClientRect();
 
-  <!-- MAIN WRAPPER -->
-  <main class="wrap">
+  const maxX = rect.width - noBtn.offsetWidth;
+  const maxY = rect.height - noBtn.offsetHeight;
 
-    <!-- PAGE 1 -->
-    <section class="page active" id="page1">
-      <div class="topbar">
-        <div class="pill">💌 Valentine Mode</div>
-        <div class="pill">📅 14 FEB</div>
-      </div>
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
-      <div class="hero">
-        <p class="mini">ladies remember if he wanted to, he would.</p>
+  noBtn.style.position = "absolute";
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+}
 
-        <h1 class="type" data-text="Hey there,"></h1>
-        <h2 class="type sub" data-text="Will you be my Valentine? 💗"></h2>
+noBtn.addEventListener("mouseenter", moveNoButton);
+noBtn.addEventListener("click", moveNoButton);
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  moveNoButton();
+});
 
-        <div class="btnRow">
-          <button class="btn yes" id="yesBtn">YES OFC 💖</button>
-          <button class="btn no" id="noBtn">NO THANK YOU 😭</button>
-        </div>
+/* YES button */
+yesBtn.addEventListener("click", () => go("page2"));
 
-        <p class="hint">Try pressing “No” 😈</p>
-      </div>
-    </section>
+/* ---------- Typewriter Effect ---------- */
+let typingStarted = false;
 
-    <!-- PAGE 2 -->
-    <section class="page" id="page2">
-      <div class="topbar">
-        <div class="pill">🎁 Gifts</div>
-        <div class="pill ghost" onclick="go('page1')">↩ Restart</div>
-      </div>
+function typeText(el, text, speed=35){
+  return new Promise((resolve) => {
+    el.textContent = "";
+    let i = 0;
+    const timer = setInterval(() => {
+      el.textContent += text[i];
+      i++;
+      if(i >= text.length){
+        clearInterval(timer);
+        resolve();
+      }
+    }, speed);
+  });
+}
 
-      <h1 class="title">Yay, you said YES! 🥹💗</h1>
-      <p class="subtitle">I made all these for you hehe</p>
+async function startTypewriter(){
+  if(typingStarted) return;
+  typingStarted = true;
 
-      <div class="giftGrid">
-        <button class="giftCard" onclick="goGift(1)">
-          <span class="emoji">🌹</span>
-          <span class="gTitle">Gift 1</span>
-          <span class="gDesc">Cute messages</span>
-        </button>
+  const els = document.querySelectorAll("#page1 .type");
+  for(const el of els){
+    await typeText(el, el.dataset.text, 30);
+  }
+}
 
-        <button class="giftCard" onclick="goGift(2)">
-          <span class="emoji">💌</span>
-          <span class="gTitle">Gift 2</span>
-          <span class="gDesc">Love letter</span>
-        </button>
+/* ---------- Floating Hearts Generator ---------- */
+const heartsBox = document.getElementById("hearts");
+const heartEmojis = ["💗","💖","💘","💝","💕","💞","❤️"];
 
-        <button class="giftCard" onclick="goGift(3)">
-          <span class="emoji">🎶</span>
-          <span class="gTitle">Gift 3</span>
-          <span class="gDesc">QR Song</span>
-        </button>
-      </div>
-    </section>
+function spawnHeart(){
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
 
-    <!-- GIFT 1 -->
-    <section class="page" id="gift1">
-      <div class="topbar">
-        <div class="pill">🌹 Gift 1</div>
-        <div class="pill ghost" onclick="go('page2')">← Back</div>
-      </div>
+  const left = Math.random() * 100;
+  const size = 14 + Math.random()*22;
+  const duration = 4 + Math.random()*5;
 
-      <div class="card big">
-        <h2 class="title2">A bouquet for you 💐</h2>
+  h.style.left = left + "vw";
+  h.style.fontSize = size + "px";
+  h.style.animationDuration = duration + "s";
 
-        <div class="bubbleRow">
-          <div class="bubble">I will always love you no matter what 💗</div>
-          <div class="bubble">You are the best part of my life 🥹</div>
-          <div class="bubble">You will forever be my only option ♾️</div>
-          <div class="bubble">I can’t imagine my life without you 💞</div>
-        </div>
+  heartsBox.appendChild(h);
 
-        <button class="btn backBtn" onclick="go('page2')">Back to Gifts 🎁</button>
-      </div>
-    </section>
+  setTimeout(() => h.remove(), duration * 1000);
+}
 
-    <!-- GIFT 2 -->
-    <section class="page" id="gift2">
-      <div class="topbar">
-        <div class="pill">💌 Gift 2</div>
-        <div class="pill ghost" onclick="go('page2')">← Back</div>
-      </div>
+setInterval(spawnHeart, 280);
 
-      <div class="paper">
-        <h2 class="paperTitle">Words from my heart ✍️</h2>
+/* Start */
+startTypewriter();
 
-        <p><b>To the love of my life,</b></p>
-        <p>
-          You make my life so meaningful and I’m so lucky to have you.
-          I love you wholeheartedly and I can’t wait to keep loving you
-          for the rest of my life.
-        </p>
-        <p>
-          You’re literally the most beautiful girl I know.
-          I choose you… every single day. 💗
-        </p>
-
-        <p class="xoxo">XOXO</p>
-
-        <button class="btn backBtn" onclick="go('page2')">Back to Gifts 🎁</button>
-      </div>
-    </section>
-
-    <!-- GIFT 3 -->
-    <section class="page" id="gift3">
-      <div class="topbar">
-        <div class="pill">🎶 Gift 3</div>
-        <div class="pill ghost" onclick="go('page2')">← Back</div>
-      </div>
-
-      <div class="card big center">
-        <h2 class="title2">Song for you 🎧</h2>
-        <p class="subtitle">Scan the QR code 👇</p>
-
-        <div class="qrWrap">
-          <img src="qr.png" alt="QR Code" class="qr"/>
-        </div>
-
-        <p class="tiny">Made with love 💗</p>
-
-        <button class="btn yes" onclick="go('page1')">Click to Restart ↩</button>
-      </div>
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
-</body>
-</html>
